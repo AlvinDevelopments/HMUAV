@@ -1,8 +1,28 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 import javax.swing.ImageIcon;
@@ -20,13 +40,10 @@ import javax.swing.JMenuItem;
 import java.awt.Insets;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 
+public class GUI extends JFrame {
 
-public class GUI extends JFrame implements KeyListener
-{
 	private static final long serialVersionUID = 1L;
 	public static JTextField txtFieldZ, txtFieldSpeed, txtFieldNose, txtFieldRoll, txtFieldIP, txtEulerRoll, txtEulerPitch, txtEulerYaw, txtAccX, txtAccY, txtAccZ;
 	//public static Draw canvas;
@@ -34,12 +51,9 @@ public class GUI extends JFrame implements KeyListener
 	public static JLabel depthPtr;
 	
 	private JPanel contentPane;
-//	private JFrame window;
 
 	public GUI() 
 	{
-		
-//		window = new JFrame();
 		/***
 		 * Format / Layout of the GUI
 		 */
@@ -60,12 +74,11 @@ public class GUI extends JFrame implements KeyListener
 		depthPtr.setBounds(26, 59, 14, 14);
 		//depthBar.setVerticalAlignment(SwingConstants.TOP);
 		contentPane.add(depthPtr);
-		//window.getContentPane().add(depthPtr);
 		
 		JLabel depthBar = new JLabel(new ImageIcon("depthBar.png"));
 		depthBar.setBounds(25, 66, 16, 600);
 		depthBar.setBorder(new LineBorder(new Color(255, 255, 255)));
-		depthBar.setVerticalAlignment(SwingConstants.TOP);
+		//depthBar.setVerticalAlignment(SwingConstants.TOP);
 		contentPane.add(depthBar);
 		
 		JPanel panel = new JPanel();
@@ -73,13 +86,11 @@ public class GUI extends JFrame implements KeyListener
 		panel.setBackground(SystemColor.control);
 		panel.setBounds(732, 131, 274, 436);
 		contentPane.add(panel);
-		//window.add(panel);
 		panel.setLayout(null);
 		
 		/***
 		 * Plotting Vehicle's Status in Numbers and Texts
-		**/
-		 
+		 */
 		JLabel lblAxisZ = new JLabel("Elevation");
 		lblAxisZ.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblAxisZ.setForeground(Color.BLACK);
@@ -342,39 +353,6 @@ public class GUI extends JFrame implements KeyListener
 		JLabel logo = new JLabel(new ImageIcon("logo.png"));
 		logo.setVerticalAlignment(SwingConstants.CENTER);
 		panelLogo.add(logo);
-		
-		addKeyListener(this);
-        setFocusable(true);
-        setFocusTraversalKeysEnabled(false);
-	
 	}
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-		//Unused
-		
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode()==KeyEvent.VK_UP) {
-			System.out.println("Up");
-		}
-		else if(e.getKeyCode()==KeyEvent.VK_DOWN) {
-			System.out.println("Down");
-		}
-		else if(e.getKeyCode()==KeyEvent.VK_LEFT) {
-			System.out.println("Left");
-		}
-		else if(e.getKeyCode()==KeyEvent.VK_RIGHT) {
-			System.out.println("Right");
-		}
-		
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		//Unused
-	}
 }

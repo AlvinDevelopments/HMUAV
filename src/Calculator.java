@@ -23,13 +23,13 @@ public class Calculator extends Thread
 			//System.out.println("Euler: " + eulerAngle[0]+" "+eulerAngle[1]+" "+eulerAngle[2] //+ //" Velocity: " + position[0] +
 					/*" " + position[1] + " " + position[2]*///);
 			
-			GUI.txtEulerRoll.setText(Double.toString(eulerAngle[0]));
-			GUI.txtEulerPitch.setText(Double.toString(eulerAngle[1]));
-			GUI.txtEulerYaw.setText(Double.toString(eulerAngle[2]));
+			GUI3.txtEulerRoll.setText(Double.toString(eulerAngle[0]));
+			GUI3.txtEulerPitch.setText(Double.toString(eulerAngle[1]));
+			GUI3.txtEulerYaw.setText(Double.toString(eulerAngle[2]));
 			
-			GUI.txtAccX.setText(Double.toString(TCPServer.bbData[4]));
-			GUI.txtAccY.setText(Double.toString(TCPServer.bbData[5]));
-			GUI.txtAccZ.setText(Double.toString(TCPServer.bbData[6]));
+			GUI3.txtAccX.setText(Double.toString(TCPServer.bbData[4]));
+			GUI3.txtAccY.setText(Double.toString(TCPServer.bbData[5]));
+			GUI3.txtAccZ.setText(Double.toString(TCPServer.bbData[6]));
 	
 		}
 	}
