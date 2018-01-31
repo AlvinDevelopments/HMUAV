@@ -34,8 +34,15 @@ import javax.swing.Icon;
 import java.awt.event.InputMethodListener;
 import java.awt.event.InputMethodEvent;
 import javax.swing.event.ChangeListener;
+
+import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
+
 import javax.swing.event.ChangeEvent;
 import javax.swing.JTextPane;
+import java.beans.PropertyChangeListener;
+import java.util.Arrays;
+import java.beans.PropertyChangeEvent;
 
 public class newGUI extends JFrame {
 
@@ -71,8 +78,6 @@ public class newGUI extends JFrame {
 	 */
 	public newGUI() {
 		
-		
-		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 945, 610);
 		
@@ -101,14 +106,27 @@ public class newGUI extends JFrame {
 		panel_4.add(panel_5);
 		
 		JLabel lblNewLabel = new JLabel(new ImageIcon("home_underwater_sectionbg2.jpg"));
-		panel_5.add(lblNewLabel);
+		//panel_5.add(lblNewLabel);
+		//System.out.println(Arrays.toString(Webcam.getWebcams().toArray()));
+		
+		//WebcamPanel camPanel= new WebcamPanel(Webcam.getDefault());
+		//WebcamPanel camPanel2= new WebcamPanel(Webcam.getWebcams().get(0));
+		
+		//WebcamPanel camPanel1= new WebcamPanel(Webcam.getDefault());
+//		camPanel.setMinimumSize(getSize());
+//		camPanel1.setMinimumSize(getSize());
+		//panel_5.add(camPanel);
+		//panel_5.pack();
+		panel_5.setVisible(true);
+		//panel_5.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel panel_6 = new JPanel();
 		panel_6.setBounds(308, 26, 250, 203);
 		panel_4.add(panel_6);
 		
 		JLabel label_14 = new JLabel(new ImageIcon("home_underwater_sectionbg2.jpg"));
-		panel_6.add(label_14);
+		//panel_6.add(label_14);
+		//panel_6.add(camPanel1);
 		
 		JLabel lblCamera = new JLabel("Left Camera");
 		lblCamera.setBounds(32, 6, 75, 16);
@@ -127,9 +145,14 @@ public class newGUI extends JFrame {
 		sliders[0].setMinimum(-100);
 		sliders[0].addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+				//System.out.print("left thrust "+sliders[0].getValue()+"\n");
+				//TCPServer.input = "0"+" "+newGUI.sliders[0].getValue()+"\n";
 				textField.setText(Integer.toString(sliders[0].getValue()));
+				HBridge.checkFlag = 1;
 			}
+		
 		});
+		
 		sliders[0].setOrientation(SwingConstants.VERTICAL);
 		sliders[0].setBounds(26, 69, 34, 145);
 		panel_7.add(sliders[0]);
@@ -137,6 +160,7 @@ public class newGUI extends JFrame {
 		sliders[1] = new JSlider();
 		sliders[1].addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+				//TCPServer.input = "1"+" "+newGUI.sliders[1].getValue()+"\n";
 				textField_1.setText(Integer.toString(sliders[1].getValue()));
 			}
 		});
@@ -145,9 +169,13 @@ public class newGUI extends JFrame {
 		panel_7.add(sliders[1]);
 		
 		sliders[2] = new JSlider();
+		sliders[2].setValue(0);
+		sliders[2].setMinimum(-100);
 		sliders[2].addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+				//TCPServer.input = "2"+" "+newGUI.sliders[2].getValue()+"\n";
 				textField_2.setText(Integer.toString(sliders[2].getValue()));
+				HBridge.checkFlag = 1;
 			}
 		});
 		sliders[2].setOrientation(SwingConstants.VERTICAL);
@@ -157,6 +185,7 @@ public class newGUI extends JFrame {
 		sliders[3] = new JSlider();
 		sliders[3].addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+				//TCPServer.input = "3"+" "+newGUI.sliders[3].getValue()+"\n";
 				textField_3.setText(Integer.toString(sliders[3].getValue()));
 			}
 		});
@@ -165,9 +194,13 @@ public class newGUI extends JFrame {
 		panel_7.add(sliders[3]);
 		
 		sliders[4] = new JSlider();
+		sliders[4].setValue(0);
+		sliders[4].setMinimum(-100);
 		sliders[4].addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+				//TCPServer.input = "4"+" "+newGUI.sliders[4].getValue()+"\n";
 				textField_4.setText(Integer.toString(sliders[4].getValue()));
+				HBridge.checkFlag = 1;
 			}
 		});
 		sliders[4].setOrientation(SwingConstants.VERTICAL);
@@ -177,6 +210,7 @@ public class newGUI extends JFrame {
 		sliders[5] = new JSlider();
 		sliders[5].addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+				//TCPServer.input = "5"+" "+newGUI.sliders[5].getValue()+"\n";
 				textField_5.setText(Integer.toString(sliders[5].getValue()));
 			}
 		});
@@ -201,9 +235,9 @@ public class newGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				sliders[0].setValue(0);
 				sliders[1].setValue(50);
-				sliders[2].setValue(50);
+				sliders[2].setValue(0);
 				sliders[3].setValue(50);
-				sliders[4].setValue(50);
+				sliders[4].setValue(0);
 				sliders[5].setValue(50);
 			}
 		});
@@ -211,13 +245,12 @@ public class newGUI extends JFrame {
 		panel_7.add(btnReset);
 		
 		textField = new JTextField();
-		textField.setText("0");
-		textField.addInputMethodListener(new InputMethodListener() {
-			public void caretPositionChanged(InputMethodEvent event) {
-			}
-			public void inputMethodTextChanged(InputMethodEvent event) {
+		textField.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				sliders[0].setValue(Integer.valueOf(textField.getText()));
 			}
 		});
+		textField.setText("0");
 		textField.setBounds(26, 51, 61, 26);
 		panel_7.add(textField);
 		textField.setColumns(10);
@@ -227,9 +260,10 @@ public class newGUI extends JFrame {
 		textField_1.setColumns(10);
 		textField_1.setBounds(89, 51, 61, 26);
 		panel_7.add(textField_1);
+
 		
 		textField_2 = new JTextField();
-		textField_2.setText("50");
+		textField_2.setText("0");
 		textField_2.setColumns(10);
 		textField_2.setBounds(181, 51, 61, 26);
 		panel_7.add(textField_2);
@@ -241,7 +275,7 @@ public class newGUI extends JFrame {
 		panel_7.add(textField_3);
 		
 		textField_4 = new JTextField();
-		textField_4.setText("50");
+		textField_4.setText("0");
 		textField_4.setBounds(333, 51, 69, 26);
 		panel_7.add(textField_4);
 		textField_4.setColumns(10);
@@ -260,6 +294,18 @@ public class newGUI extends JFrame {
 		btnNewButton.setBounds(195, 484, 109, 29);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				try{
+					Launcher.server[0].out.flush();
+					Launcher.server[2].out.flush();
+					Launcher.server[4].out.flush();
+				}catch(Exception a) {
+					System.exit(0);
+				}
+				Launcher.server[0].sendMessage("gergergergerg");
+				Launcher.server[2].sendMessage("gregergt");
+				Launcher.server[4].sendMessage("quergregergit");
+				System.out.println("exited");
 				System.exit(0);
 			}
 		});
