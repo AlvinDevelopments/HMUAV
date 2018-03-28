@@ -14,25 +14,25 @@ public class Calculator extends Thread
 		//System.out.println("Hello, Calculator!");
 	}
 	
-	public void run()
-	{
-		while(isRunning)
-		{
-			eulerAngle = getAngle(TCPServer.bbData[0], TCPServer.bbData[1], TCPServer.bbData[2], TCPServer.bbData[3]);
-			position = getPosition(TCPServer.bbData[4], TCPServer.bbData[5], TCPServer.bbData[6]);
-			//System.out.println("Euler: " + eulerAngle[0]+" "+eulerAngle[1]+" "+eulerAngle[2] //+ //" Velocity: " + position[0] +
-					/*" " + position[1] + " " + position[2]*///);
-			
-			GUI3.txtEulerRoll.setText(Double.toString(eulerAngle[0]));
-			GUI3.txtEulerPitch.setText(Double.toString(eulerAngle[1]));
-			GUI3.txtEulerYaw.setText(Double.toString(eulerAngle[2]));
-			
-			GUI3.txtAccX.setText(Double.toString(TCPServer.bbData[4]));
-			GUI3.txtAccY.setText(Double.toString(TCPServer.bbData[5]));
-			GUI3.txtAccZ.setText(Double.toString(TCPServer.bbData[6]));
-	
-		}
-	}
+//	public void run()
+//	{
+//		while(isRunning)
+//		{
+//			eulerAngle = getAngle(TCPServer.bbData[0], TCPServer.bbData[1], TCPServer.bbData[2], TCPServer.bbData[3]);
+//			position = getPosition(TCPServer.bbData[4], TCPServer.bbData[5], TCPServer.bbData[6]);
+//			//System.out.println("Euler: " + eulerAngle[0]+" "+eulerAngle[1]+" "+eulerAngle[2] //+ //" Velocity: " + position[0] +
+//					/*" " + position[1] + " " + position[2]*///);
+//			
+//			GUI3.txtEulerRoll.setText(Double.toString(eulerAngle[0]));
+//			GUI3.txtEulerPitch.setText(Double.toString(eulerAngle[1]));
+//			GUI3.txtEulerYaw.setText(Double.toString(eulerAngle[2]));
+//			
+//			GUI3.txtAccX.setText(Double.toString(TCPServer.bbData[4]));
+//			GUI3.txtAccY.setText(Double.toString(TCPServer.bbData[5]));
+//			GUI3.txtAccZ.setText(Double.toString(TCPServer.bbData[6]));
+//	
+//		}
+//	}
 	/**
 	 * Takes Quaternions and converts to Euler angles
 	 * @param x - x in Quaternion
@@ -74,8 +74,8 @@ public class Calculator extends Thread
 		// Calculate Acceleration;
 		// like result[0] = ....;
 		// like result[1] = ....;
-		float time = TCPServer.timeDiff;
-		timeSec = time / 1000;
+		//float time = TCPServer.timeDiff;
+		//timeSec = time / 1000;
 		double accx= 0;
 		double accy = 0;
 		double accz= 0;

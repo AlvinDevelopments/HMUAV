@@ -1,29 +1,33 @@
 import java.io.IOException;
 
-public class HBridge extends Thread
+public class Servo extends Thread
 {
 	static String fromBeagleBone, toBeagleBone;
 	private static int checkFlag = 0;
+//	int dutyCycleBefore;
+//	int dutyCycle;
+//	int sliderNumber = 0;
 
  
-    public HBridge() throws IOException
+    public Servo() throws IOException
     {	
     		initialize();
     }
     
     public void initialize() throws IOException
     {
-    		//System.out.println("PWM Controls initialized.");
-    		//Launcher.server[sliderNumber].sendMessage("thruster"+" "+sliderNumber+" connected.");
+    		System.out.println("Servo initialized.");
+//    		dutyCycleBefore = 0;
+//    		dutyCycle = 0;
+    		//Launcher.server[1].sendMessage("thruster"+" "+sliderNumber+" connected.");
     }
     
 	@Override
 	public void run() 
 	{
-		//System.out.println("PWM Controls is active.");
 		while(true) {
 			if(checkDutyCycle())	{
-				 Launcher.hServer.sendMessage(newGUI.thruster_1.getValue(),newGUI.thruster_2.getValue(),newGUI.thruster_3.getValue());
+				 Launcher.sServer.sendMessage(newGUI.servo_1.getValue(),newGUI.servo_2.getValue(),newGUI.servo_3.getValue());
 				checkFlag=0;
 			}
 		}
@@ -31,10 +35,11 @@ public class HBridge extends Thread
 	
 	public boolean checkDutyCycle() {
 		if(newGUI.thruster_1!=null&&checkFlag==1) {
+//			dutyCycle = newGUI.sliders[sliderNumber].getValue();
 			return true;
 		}
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(50);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,6 +47,7 @@ public class HBridge extends Thread
 		return false;
 	}
 	
+
 	public static void setFlagOn() {
 		checkFlag = 1;
 	}

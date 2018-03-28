@@ -1,21 +1,22 @@
 import java.awt.EventQueue;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.IOException;
-import java.net.InetAddress;
 
 public class Launcher {
-	static TCPServer[] server = new TCPServer[6];
+	static TCPServer sServer;
+	static TCPServer hServer; 
+	static HBridge thrust;
+	static Servo servo;
+	static IMU imu;
+	static Controls control;
+	static Settings setting;
+	
+	static String address = "192.168.7.2";
+	static String sPort = "8089";
+	static String hPort = "8090";
+	
 	
 	public static void main(String[] arguments) throws Exception 
 	{
-		
-		Calculator calc;
-		HBridge thrust1;
-		HBridge thrust2;
-		HBridge thrust3;
-		
+	
 			
 		// Graphic User Interface (GUI) is generated.
 		EventQueue.invokeLater(new Runnable() 
@@ -27,6 +28,12 @@ public class Launcher {
 				{
 					newGUI frame = new newGUI();
 					frame.setVisible(true);
+					
+					control = new Controls();
+					control.setVisible(false);
+					
+					setting = new Settings();
+					setting.setVisible(false);
 				} 
 				catch (Exception e) 
 				{
@@ -44,44 +51,41 @@ public class Launcher {
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
-			
+		}				
 		
-	    server[0] = new TCPServer("8089");
-		server[0].start();
+		imu = new IMU();
+		imu.start();
 		
-		server[1] = new TCPServer("8090");
-		server[1].start();
+	}		
+	
+	
+	static void launch() throws Exception {
 		
-//		server[2] = new TCPServer("8091");
-//		server[2].start();
-//		
-//		server[3] = new TCPServer("8092");
-//		server[3].start();
-//		
-//		server[4] = new TCPServer("8093");
-//		server[4].start();
+		Controller controller = new Controller();
+		controller.start();
+		sServer = new TCPServer(address,sPort);
+		sServer.start();		
+		hServer = new TCPServer(address,hPort);
+		hServer.start();		
 		
-//		server[5] = new TCPServer("8094");
-//		server[5].start();
+		System.out.println("Servers started.\n");
 		
-		System.out.println("Servers started.");
+		servo = new Servo();
+		servo.start();
+		
+		thrust = new HBridge();
+		thrust.start();
+		
+		System.out.println("PWM Controls initialized.\n");
+		System.out.println("IMU initialized.\n");
 		
 		
-//		calc.start();
-//		System.out.println("Calc initialized.");
-		
-		
-		thrust1 = new HBridge(0);
-		thrust1.start();
-//		
-//		thrust2 = new HBridge(2);
-//		thrust2.start();
-//		
-//		thrust3 = new HBridge(4);
-//		thrust3.start();
-//					
-		System.out.println("PWM Controls initialized.");
 	}
-			
+	
+	static void setPorts(String IP, String hhPort, String ssPort) {
+		System.out.println("Ports set to ");
+		address = IP;
+		sPort = ssPort;
+		hPort = hhPort;
+	}
 }

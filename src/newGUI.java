@@ -1,51 +1,67 @@
-import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.BoxLayout;
+import javax.swing.border.LineBorder;
+import javax.imageio.ImageIO;
+import javax.media.CannotRealizeException;
+import javax.media.CaptureDeviceInfo;
+import javax.media.CaptureDeviceManager;
+import javax.media.Manager;
+import javax.media.MediaLocator;
+import javax.media.NoPlayerException;
+import javax.media.Player;
 import javax.swing.ImageIcon;
-import javax.swing.JToolBar;
-import java.awt.Panel;
 import javax.swing.JMenuBar;
-import java.awt.Label;
 import javax.swing.JLabel;
-import javax.swing.JTabbedPane;
-import java.awt.TextArea;
 import java.awt.GridLayout;
-import javax.swing.JSplitPane;
-import java.awt.Canvas;
-import java.awt.Color;
+import java.awt.Image;
+
 import javax.swing.JButton;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.SystemColor;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.border.BevelBorder;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
-import java.awt.Component;
-import javax.swing.border.LineBorder;
 import java.awt.Font;
 import javax.swing.JTextField;
-import javax.swing.Icon;
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
 import javax.swing.event.ChangeListener;
 
-import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamPanel;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.JTextPane;
 import java.beans.PropertyChangeListener;
-import java.util.Arrays;
+import java.io.File;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Vector;
 import java.beans.PropertyChangeEvent;
+import javax.swing.JMenuItem;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+
+import javax.swing.JTextArea;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.UIManager;
+import javax.swing.border.EtchedBorder;
+import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import javax.swing.JScrollPane;
 
 public class newGUI extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1179297588688460469L;
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
@@ -53,9 +69,24 @@ public class newGUI extends JFrame {
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTextField textField_5;
+
+	public static JTextField txtFieldZ, txtFieldSpeed, txtFieldNose, txtFieldRoll, txtEulerRoll, txtEulerPitch, txtEulerYaw, txtAccX, txtAccY, txtAccZ;
 	
-	static JSlider[] sliders = new JSlider[6];
-	static JTextPane textPane = new JTextPane();
+	static JSlider servo_1;
+	static JSlider servo_2;
+	static JSlider servo_3;
+	static JSlider thruster_1;
+	static JSlider thruster_2;
+	static JSlider thruster_3;
+	
+	
+	public static Controls control;
+	public static Settings setting;
+	public static JTextField txtIP;
+	public static JTextField txtHBridgePort;
+	public static JTextField txtServoPort;
+
+	
 	
 	/**
 	 * Launch the application.
@@ -75,11 +106,15 @@ public class newGUI extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws IOException 
+	 * @throws CannotRealizeException 
+	 * @throws NoPlayerException 
 	 */
-	public newGUI() {
+	public newGUI() throws NoPlayerException, CannotRealizeException, IOException {
+		setResizable(false);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 945, 610);
+		setBounds(100, 100, 1460, 750);
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setMargin(new Insets(0, 10, 0, 0));
@@ -90,262 +125,915 @@ public class newGUI extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[] {387, 418, 424, 6};
+		gbl_contentPane.rowHeights = new int[]{425, 0};
+		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0};
+		gbl_contentPane.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+		contentPane.setLayout(gbl_contentPane);
+		 
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(5, 5, 591, 524);
-		contentPane.add(panel);
-		panel.setLayout(new GridLayout(0, 1, 0, 0));
+		JPanel io = new JPanel();
+		io.setBackground(SystemColor.window);
+		GridBagConstraints gbc_io = new GridBagConstraints();
+		gbc_io.fill = GridBagConstraints.BOTH;
+		gbc_io.insets = new Insets(0, 0, 0, 5);
+		gbc_io.gridx = 0;
+		gbc_io.gridy = 0;
+		contentPane.add(io, gbc_io);
+		GridBagLayout gbl_io = new GridBagLayout();
+		gbl_io.columnWidths = new int[] {333, 333};
+		gbl_io.rowHeights = new int[]{263, 290, 0};
+		gbl_io.columnWeights = new double[]{1.0, 1.0};
+		gbl_io.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
+		io.setLayout(gbl_io);
 		
-		JPanel panel_4 = new JPanel();
-		panel.add(panel_4);
-		panel_4.setLayout(null);
 		
-		JPanel panel_5 = new JPanel();
-		panel_5.setBounds(32, 26, 250, 203);
-		panel_4.add(panel_5);
 		
-		JLabel lblNewLabel = new JLabel(new ImageIcon("home_underwater_sectionbg2.jpg"));
-		//panel_5.add(lblNewLabel);
-		//System.out.println(Arrays.toString(Webcam.getWebcams().toArray()));
+		CaptureDeviceInfo cam = null;
+		cam = Camera.run();
 		
-		//WebcamPanel camPanel= new WebcamPanel(Webcam.getDefault());
-		//WebcamPanel camPanel2= new WebcamPanel(Webcam.getWebcams().get(0));
-		
-		//WebcamPanel camPanel1= new WebcamPanel(Webcam.getDefault());
-//		camPanel.setMinimumSize(getSize());
-//		camPanel1.setMinimumSize(getSize());
-		//panel_5.add(camPanel);
-		//panel_5.pack();
-		panel_5.setVisible(true);
-		//panel_5.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		JPanel panel_6 = new JPanel();
-		panel_6.setBounds(308, 26, 250, 203);
-		panel_4.add(panel_6);
-		
-		JLabel label_14 = new JLabel(new ImageIcon("home_underwater_sectionbg2.jpg"));
-		//panel_6.add(label_14);
-		//panel_6.add(camPanel1);
-		
-		JLabel lblCamera = new JLabel("Left Camera");
-		lblCamera.setBounds(32, 6, 75, 16);
-		panel_4.add(lblCamera);
-		
-		JLabel lblRightCamera = new JLabel("Right Camera");
-		lblRightCamera.setBounds(308, 6, 84, 16);
-		panel_4.add(lblRightCamera);
-		
-		JPanel panel_7 = new JPanel();
-		panel.add(panel_7);
-		panel_7.setLayout(null);
-		
-		sliders[0] = new JSlider();
-		sliders[0].setValue(0);
-		sliders[0].setMinimum(-100);
-		sliders[0].addChangeListener(new ChangeListener() {
+//			JPanel cameras = new JPanel();
+		 
+//		 CaptureDeviceInfo device;
+//		 MediaLocator ml;
+		MediaLocator ml = null;
+		    Player player;
+		    Component cameras = null;
+		    
+		    
+//		 
+//		    public SimpleWebCam() {
+//		        initComponents();
+//		        // path to webcam in windows web cam device is located in here
+//		        CaptureDeviceManager.
+//		 
+		        if(cam!=null) {
+		        	ml = new MediaLocator(cam.getLocator().toString());
+		        
+			        try {
+			        	
+			            player = Manager.createRealizedPlayer(ml);
+			 
+			            player.start();
+			            // create video screen to display webcam preview
+			            cameras = player.getVisualComponent();
+			            cameras.setSize(io.getWidth()/4, io.getHeight());
+			        }
+			        finally {
+	//		            p1.removeAll();
+	//		            p1.add(videoScreen, BorderLayout.CENTER);
+	//		            p1.repaint();
+	//		            p1.revalidate();
+	//		 
+	//		            p2.removeAll();
+	//		            p2.add(player.getControlPanelComponent());
+	//		            p2.repaint();
+	//		            p2.revalidate();
+			        }
+		        
+			
+//		cameras.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		GridBagConstraints gbc_cameras = new GridBagConstraints();
+		gbc_cameras.fill = GridBagConstraints.BOTH;
+		gbc_cameras.insets = new Insets(0, 0, 5, 0);
+		gbc_cameras.gridx = 0;
+		gbc_cameras.gridy = 0;
+		io.add(cameras, gbc_cameras);
+		GridBagLayout gbl_cameras = new GridBagLayout();
+		gbl_cameras.columnWidths = new int[]{413, 0};
+		gbl_cameras.rowHeights = new int[]{258, 0};
+		gbl_cameras.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_cameras.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+										
+										JPanel cam1Panel = new JPanel();
+										GridBagConstraints gbc_cam1Panel = new GridBagConstraints();
+										gbc_cam1Panel.gridwidth = 2;
+										gbc_cam1Panel.ipady = 10;
+										gbc_cam1Panel.ipadx = 10;
+										gbc_cam1Panel.insets = new Insets(0, 0, 5, 5);
+										gbc_cam1Panel.fill = GridBagConstraints.BOTH;
+										gbc_cam1Panel.gridx = 0;
+										gbc_cam1Panel.gridy = 0;
+										cam1Panel.add(cameras);
+										io.add(cam1Panel, gbc_cam1Panel);
+//		cameras.setLayout(gbl_cameras);
+	}
+										
+										JPanel panel_7 = new JPanel();
+										panel_7.setBackground(SystemColor.window);
+										panel_7.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+										GridBagConstraints gbc_panel_7 = new GridBagConstraints();
+										gbc_panel_7.gridwidth = 2;
+										gbc_panel_7.fill = GridBagConstraints.HORIZONTAL;
+										gbc_panel_7.gridx = 0;
+										gbc_panel_7.gridy = 1;
+										io.add(panel_7, gbc_panel_7);
+										GridBagLayout gbl_panel_7 = new GridBagLayout();
+										gbl_panel_7.columnWidths = new int[] {200, 30, 200};
+										gbl_panel_7.rowHeights = new int[]{29, 222, 0};
+										gbl_panel_7.columnWeights = new double[]{1.0, 0.0, 1.0};
+										gbl_panel_7.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+										panel_7.setLayout(gbl_panel_7);
+										
+										JLabel lblThrusters = new JLabel("Thruster Speed (Duty Cycle)");
+										GridBagConstraints gbc_lblThrusters = new GridBagConstraints();
+										gbc_lblThrusters.fill = GridBagConstraints.VERTICAL;
+										gbc_lblThrusters.insets = new Insets(0, 0, 5, 5);
+										gbc_lblThrusters.gridx = 0;
+										gbc_lblThrusters.gridy = 0;
+										panel_7.add(lblThrusters, gbc_lblThrusters);
+												
+												JLabel lblServos = new JLabel("Servos (Angle)");
+												GridBagConstraints gbc_lblServos = new GridBagConstraints();
+												gbc_lblServos.insets = new Insets(0, 0, 5, 0);
+												gbc_lblServos.gridx = 2;
+												gbc_lblServos.gridy = 0;
+												panel_7.add(lblServos, gbc_lblServos);
+												
+												JPanel thrusters = new JPanel();
+												thrusters.setBackground(SystemColor.window);
+												GridBagConstraints gbc_thrusters = new GridBagConstraints();
+												gbc_thrusters.fill = GridBagConstraints.BOTH;
+												gbc_thrusters.insets = new Insets(0, 0, 0, 5);
+												gbc_thrusters.gridx = 0;
+												gbc_thrusters.gridy = 1;
+												panel_7.add(thrusters, gbc_thrusters);
+												GridBagLayout gbl_thrusters = new GridBagLayout();
+												gbl_thrusters.columnWidths = new int[] {70, 70, 70};
+												gbl_thrusters.rowHeights = new int[]{0, 190, 0};
+												gbl_thrusters.columnWeights = new double[]{1.0, 1.0, 1.0};
+												gbl_thrusters.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+												thrusters.setLayout(gbl_thrusters);
+																
+																textField = new JTextField();
+																textField.setEditable(false);
+																GridBagConstraints gbc_textField = new GridBagConstraints();
+																gbc_textField.fill = GridBagConstraints.BOTH;
+																gbc_textField.insets = new Insets(0, 0, 5, 5);
+																gbc_textField.gridx = 0;
+																gbc_textField.gridy = 0;
+																thrusters.add(textField, gbc_textField);
+																textField.addPropertyChangeListener(new PropertyChangeListener() {
+																	public void propertyChange(PropertyChangeEvent evt) {
+																		thruster_1.setValue(Integer.valueOf(textField.getText()));
+																	}
+																});
+																
+																textField.setText("50");
+																textField.setColumns(10);
+																
+																		
+																		textField_2 = new JTextField();
+																		textField_2.setEditable(false);
+																		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
+																		gbc_textField_2.fill = GridBagConstraints.BOTH;
+																		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
+																		gbc_textField_2.gridx = 1;
+																		gbc_textField_2.gridy = 0;
+																		thrusters.add(textField_2, gbc_textField_2);
+																		textField_2.setText("45");
+																		textField_2.setColumns(10);
+																
+																textField_4 = new JTextField();
+																textField_4.setEditable(false);
+																GridBagConstraints gbc_textField_4 = new GridBagConstraints();
+																gbc_textField_4.fill = GridBagConstraints.BOTH;
+																gbc_textField_4.insets = new Insets(0, 0, 5, 0);
+																gbc_textField_4.gridx = 2;
+																gbc_textField_4.gridy = 0;
+																thrusters.add(textField_4, gbc_textField_4);
+																textField_4.setText("48");
+																textField_4.setColumns(10);
+																
+																thruster_1 = new JSlider();
+																GridBagConstraints gbc_thruster_1 = new GridBagConstraints();
+																gbc_thruster_1.fill = GridBagConstraints.BOTH;
+																gbc_thruster_1.insets = new Insets(0, 0, 0, 5);
+																gbc_thruster_1.gridx = 0;
+																gbc_thruster_1.gridy = 1;
+																thrusters.add(thruster_1, gbc_thruster_1);
+																thruster_1.setValue(50);
+																thruster_1.setMinimum(0);
+																thruster_1.setMaximum(100);
+																
+																thruster_1.setPaintLabels(true);
+																//		thruster_1.setMinorTickSpacing(5);
+																		thruster_1.setMajorTickSpacing(25);
+																		thruster_1.setPaintTicks(true);
+																		//		thruster_1.setSnapToTicks(true);
+																				thruster_1.setLabelTable(thruster_1.createStandardLabels(50));
+																				
+		thruster_1.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				//System.out.print("left thrust "+sliders[0].getValue()+"\n");
-				//TCPServer.input = "0"+" "+newGUI.sliders[0].getValue()+"\n";
-				textField.setText(Integer.toString(sliders[0].getValue()));
-				HBridge.checkFlag = 1;
+				textField.setText(Integer.toString(thruster_1.getValue()));
+				HBridge.setFlagOn();
 			}
 		
 		});
 		
-		sliders[0].setOrientation(SwingConstants.VERTICAL);
-		sliders[0].setBounds(26, 69, 34, 145);
-		panel_7.add(sliders[0]);
+		thruster_1.setOrientation(SwingConstants.VERTICAL);
+												//		thruster_3.setLabelTable(thruster_1.createStandardLabels(50));
+																
+																thruster_2 = new JSlider();
+																GridBagConstraints gbc_thruster_2 = new GridBagConstraints();
+																gbc_thruster_2.fill = GridBagConstraints.BOTH;
+																gbc_thruster_2.insets = new Insets(0, 0, 0, 5);
+																gbc_thruster_2.gridx = 1;
+																gbc_thruster_2.gridy = 1;
+																thrusters.add(thruster_2, gbc_thruster_2);
+																thruster_2.setValue(45);
+																thruster_2.setMinimum(0);
+																thruster_2.setMaximum(100);
+																
+																		thruster_2.setPaintLabels(true);
+																		thruster_2.setPaintTicks(true);
+																		thruster_2.setMajorTickSpacing(25);
+																		
+																		thruster_2.addChangeListener(new ChangeListener() {
+																			public void stateChanged(ChangeEvent e) {
+																				textField_2.setText(Integer.toString(thruster_2.getValue()));
+																				HBridge.setFlagOn();
+																			}
+																		});
+																		thruster_2.setOrientation(SwingConstants.VERTICAL);
+																		thruster_2.setLabelTable(thruster_2.createStandardLabels(50));
+												
+												thruster_3 = new JSlider();
+												GridBagConstraints gbc_thruster_3 = new GridBagConstraints();
+												gbc_thruster_3.fill = GridBagConstraints.BOTH;
+												gbc_thruster_3.gridx = 2;
+												gbc_thruster_3.gridy = 1;
+												thrusters.add(thruster_3, gbc_thruster_3);
+												thruster_3.setValue(48);
+												thruster_3.setMinimum(0);
+												thruster_3.setMaximum(100);
+												
+												thruster_3.setPaintLabels(true);
+												thruster_3.setPaintTicks(true);
+												thruster_3.setMajorTickSpacing(25);
+												
+												thruster_3.addChangeListener(new ChangeListener() {
+													public void stateChanged(ChangeEvent e) {
+														textField_4.setText(Integer.toString(thruster_3.getValue()));
+														HBridge.setFlagOn();
+													}
+												});
+												thruster_3.setOrientation(SwingConstants.VERTICAL);
+										
+										
+									
+												
+												JPanel servos = new JPanel();
+												servos.setBackground(SystemColor.window);
+												GridBagConstraints gbc_servos = new GridBagConstraints();
+												gbc_servos.fill = GridBagConstraints.HORIZONTAL;
+												gbc_servos.gridx = 2;
+												gbc_servos.gridy = 1;
+												panel_7.add(servos, gbc_servos);
+												GridBagLayout gbl_servos = new GridBagLayout();
+												gbl_servos.columnWidths = new int[] {70, 70, 70};
+												gbl_servos.rowHeights = new int[]{0, 222, 0};
+												gbl_servos.columnWeights = new double[]{1.0, 1.0, 1.0};
+												gbl_servos.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+												servos.setLayout(gbl_servos);
+												
+												textField_1 = new JTextField();
+												textField_1.setEditable(false);
+												GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+												gbc_textField_1.fill = GridBagConstraints.BOTH;
+												gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+												gbc_textField_1.gridx = 0;
+												gbc_textField_1.gridy = 0;
+												servos.add(textField_1, gbc_textField_1);
+												textField_1.setText("0");
+												textField_1.setColumns(10);
+												
+												textField_3 = new JTextField();
+												textField_3.setEditable(false);
+												GridBagConstraints gbc_textField_3 = new GridBagConstraints();
+												gbc_textField_3.fill = GridBagConstraints.BOTH;
+												gbc_textField_3.insets = new Insets(0, 0, 5, 5);
+												gbc_textField_3.gridx = 1;
+												gbc_textField_3.gridy = 0;
+												servos.add(textField_3, gbc_textField_3);
+												textField_3.setText("0");
+												textField_3.setColumns(10);
+												
+												textField_5 = new JTextField();
+												textField_5.setEditable(false);
+												GridBagConstraints gbc_textField_5 = new GridBagConstraints();
+												gbc_textField_5.fill = GridBagConstraints.BOTH;
+												gbc_textField_5.insets = new Insets(0, 0, 5, 0);
+												gbc_textField_5.gridx = 2;
+												gbc_textField_5.gridy = 0;
+												servos.add(textField_5, gbc_textField_5);
+												textField_5.setText("0");
+												textField_5.setColumns(10);
+												
+												servo_1 = new JSlider();
+												GridBagConstraints gbc_servo_1 = new GridBagConstraints();
+												gbc_servo_1.fill = GridBagConstraints.BOTH;
+												gbc_servo_1.insets = new Insets(0, 0, 0, 5);
+												gbc_servo_1.gridx = 0;
+												gbc_servo_1.gridy = 1;
+												servos.add(servo_1, gbc_servo_1);
+												servo_1.setValue(0);
+												servo_1.setMinimum(0);
+												servo_1.setMaximum(1023);
+												
+
+												servo_1.setPaintLabels(true);
+												servo_1.setPaintTicks(true);
+												servo_1.setMajorTickSpacing(255);
+												
+												servo_1.addChangeListener(new ChangeListener() {
+													public void stateChanged(ChangeEvent e) {
+														textField_1.setText(Integer.toString(servo_1.getValue()));
+														Servo.setFlagOn();
+													}
+												});
+												servo_1.setOrientation(SwingConstants.VERTICAL);
+												
+												servo_2 = new JSlider();
+												GridBagConstraints gbc_servo_2 = new GridBagConstraints();
+												gbc_servo_2.fill = GridBagConstraints.BOTH;
+												gbc_servo_2.insets = new Insets(0, 0, 0, 5);
+												gbc_servo_2.gridx = 1;
+												gbc_servo_2.gridy = 1;
+												servos.add(servo_2, gbc_servo_2);
+												servo_2.setValue(0);
+												servo_2.setMinimum(0);
+												servo_2.setMaximum(1023);
+												
+												servo_2.setPaintLabels(true);
+												servo_2.setPaintTicks(true);
+												servo_2.setMajorTickSpacing(255);
+												
+												servo_2.addChangeListener(new ChangeListener() {
+													public void stateChanged(ChangeEvent e) {
+														textField_3.setText(Integer.toString(servo_2.getValue()));
+														Servo.setFlagOn();
+													}
+												});
+												servo_2.setOrientation(SwingConstants.VERTICAL);
+												
+												servo_3 = new JSlider();
+												GridBagConstraints gbc_servo_3 = new GridBagConstraints();
+												gbc_servo_3.fill = GridBagConstraints.BOTH;
+												gbc_servo_3.gridx = 2;
+												gbc_servo_3.gridy = 1;
+												servos.add(servo_3, gbc_servo_3);
+												servo_3.setValue(0);
+												servo_3.setMinimum(0);
+												servo_3.setMaximum(1023);
+												
+												servo_3.setPaintLabels(true);
+												servo_3.setPaintTicks(true);
+												servo_3.setMajorTickSpacing(255);
+												
+												
+												servo_3.addChangeListener(new ChangeListener() {
+													public void stateChanged(ChangeEvent e) {
+														textField_5.setText(Integer.toString(servo_3.getValue()));
+														Servo.setFlagOn();
+													}
+												});
+												servo_3.setOrientation(SwingConstants.VERTICAL);
 		
-		sliders[1] = new JSlider();
-		sliders[1].addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				//TCPServer.input = "1"+" "+newGUI.sliders[1].getValue()+"\n";
-				textField_1.setText(Integer.toString(sliders[1].getValue()));
+		JPanel data = new JPanel();
+		data.setBackground(SystemColor.window);
+		data.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		GridBagConstraints gbc_data = new GridBagConstraints();
+		gbc_data.fill = GridBagConstraints.BOTH;
+		gbc_data.insets = new Insets(0, 0, 0, 5);
+		gbc_data.gridx = 1;
+		gbc_data.gridy = 0;
+		contentPane.add(data, gbc_data);
+		GridBagLayout gbl_data = new GridBagLayout();
+		gbl_data.columnWidths = new int[] {30, 70, 70, 30};
+		gbl_data.rowHeights = new int[] {361, 0, 28, 29, 28, 0, 0, 81, 0};
+		gbl_data.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0};
+		gbl_data.rowWeights = new double[]{1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0};
+		data.setLayout(gbl_data);
+		
+		JTextArea scriptPane = new JTextArea();
+		scriptPane.setBackground(SystemColor.menu);
+		scriptPane.setRows(200);
+		scriptPane.setColumns(200);
+		scriptPane.setWrapStyleWord(true);
+		
+		JButton btnClear = new JButton("Clear");
+		btnClear.setBackground(UIManager.getColor("Button.background"));
+		btnClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				scriptPane.setText("");
+			}
+		});	
+		
+		JScrollPane scrollPane = new JScrollPane(scriptPane);
+		scrollPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.gridwidth = 4;
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 0;
+		gbc_scrollPane.gridy = 0;
+		data.add(scrollPane, gbc_scrollPane);
+		
+		
+		
+		scrollPane.setRowHeaderView(scriptPane);
+		scriptPane.setFont(new Font("Courier", Font.PLAIN, 13));
+		GridBagConstraints gbc_btnClear = new GridBagConstraints();
+		gbc_btnClear.fill = GridBagConstraints.BOTH;
+		gbc_btnClear.insets = new Insets(0, 0, 5, 5);
+		gbc_btnClear.gridx = 1;
+		gbc_btnClear.gridy = 2;
+		data.add(btnClear, gbc_btnClear);
+		
+		JButton btnSettings = new JButton("Connection Settings");
+		btnSettings.setBackground(UIManager.getColor("Button.background"));
+		btnSettings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Launcher.setting.setVisible(true);
 			}
 		});
-		sliders[1].setOrientation(SwingConstants.VERTICAL);
-		sliders[1].setBounds(97, 69, 34, 145);
-		panel_7.add(sliders[1]);
 		
-		sliders[2] = new JSlider();
-		sliders[2].setValue(0);
-		sliders[2].setMinimum(-100);
-		sliders[2].addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				//TCPServer.input = "2"+" "+newGUI.sliders[2].getValue()+"\n";
-				textField_2.setText(Integer.toString(sliders[2].getValue()));
-				HBridge.checkFlag = 1;
+		JButton btnSubmit = new JButton("Submit");
+		btnSubmit.setBackground(UIManager.getColor("Button.background"));
+		GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
+		gbc_btnSubmit.fill = GridBagConstraints.BOTH;
+		gbc_btnSubmit.insets = new Insets(0, 0, 5, 5);
+		gbc_btnSubmit.gridx = 2;
+		gbc_btnSubmit.gridy = 2;
+		data.add(btnSubmit, gbc_btnSubmit);
+		
+		btnSubmit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Controller.sendCommand(scriptPane.getText());
 			}
 		});
-		sliders[2].setOrientation(SwingConstants.VERTICAL);
-		sliders[2].setBounds(193, 69, 34, 145);
-		panel_7.add(sliders[2]);
 		
-		sliders[3] = new JSlider();
-		sliders[3].addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				//TCPServer.input = "3"+" "+newGUI.sliders[3].getValue()+"\n";
-				textField_3.setText(Integer.toString(sliders[3].getValue()));
-			}
-		});
-		sliders[3].setOrientation(SwingConstants.VERTICAL);
-		sliders[3].setBounds(265, 69, 34, 145);
-		panel_7.add(sliders[3]);
-		
-		sliders[4] = new JSlider();
-		sliders[4].setValue(0);
-		sliders[4].setMinimum(-100);
-		sliders[4].addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				//TCPServer.input = "4"+" "+newGUI.sliders[4].getValue()+"\n";
-				textField_4.setText(Integer.toString(sliders[4].getValue()));
-				HBridge.checkFlag = 1;
-			}
-		});
-		sliders[4].setOrientation(SwingConstants.VERTICAL);
-		sliders[4].setBounds(343, 69, 34, 145);
-		panel_7.add(sliders[4]);
-		
-		sliders[5] = new JSlider();
-		sliders[5].addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				//TCPServer.input = "5"+" "+newGUI.sliders[5].getValue()+"\n";
-				textField_5.setText(Integer.toString(sliders[5].getValue()));
-			}
-		});
-		sliders[5].setOrientation(SwingConstants.VERTICAL);
-		sliders[5].setBounds(424, 69, 34, 145);
-		panel_7.add(sliders[5]);
-		
-		JLabel lblLeft = new JLabel("Left");
-		lblLeft.setBounds(60, 220, 61, 16);
-		panel_7.add(lblLeft);
-		
-		JLabel lblRear = new JLabel("Rear");
-		lblRear.setBounds(238, 220, 61, 16);
-		panel_7.add(lblRear);
-		
-		JLabel lblRight = new JLabel("Right");
-		lblRight.setBounds(397, 220, 61, 16);
-		panel_7.add(lblRight);
-		
-		JButton btnReset = new JButton("Reset");
+		JButton btnReset = new JButton("Reset Controls");
+		btnReset.setBackground(UIManager.getColor("Button.background"));
+		GridBagConstraints gbc_btnReset = new GridBagConstraints();
+		gbc_btnReset.insets = new Insets(0, 0, 5, 5);
+		gbc_btnReset.fill = GridBagConstraints.BOTH;
+		gbc_btnReset.gridwidth = 2;
+		gbc_btnReset.gridx = 1;
+		gbc_btnReset.gridy = 3;
+		data.add(btnReset, gbc_btnReset);
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sliders[0].setValue(0);
-				sliders[1].setValue(50);
-				sliders[2].setValue(0);
-				sliders[3].setValue(50);
-				sliders[4].setValue(0);
-				sliders[5].setValue(50);
+				thruster_1.setValue(50);
+				servo_1.setValue(0);
+				thruster_2.setValue(45);
+				servo_2.setValue(0);
+				thruster_3.setValue(48);
+				servo_3.setValue(0);
 			}
 		});
-		btnReset.setBounds(445, 7, 117, 29);
-		panel_7.add(btnReset);
+		GridBagConstraints gbc_btnSettings = new GridBagConstraints();
+		gbc_btnSettings.gridwidth = 2;
+		gbc_btnSettings.fill = GridBagConstraints.BOTH;
+		gbc_btnSettings.insets = new Insets(0, 0, 5, 5);
+		gbc_btnSettings.gridx = 1;
+		gbc_btnSettings.gridy = 4;
+		data.add(btnSettings, gbc_btnSettings);
 		
-		textField = new JTextField();
-		textField.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				sliders[0].setValue(Integer.valueOf(textField.getText()));
+		JButton btnControls = new JButton("Controls");
+		btnControls.setBackground(UIManager.getColor("Button.background"));
+		btnControls.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Launcher.control.setVisible(true);
 			}
 		});
-		textField.setText("0");
-		textField.setBounds(26, 51, 61, 26);
-		panel_7.add(textField);
-		textField.setColumns(10);
+		btnControls.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+//				Launcher.control.setVisible(true);
+				control.setVisible(true);
+			}
+		});
+		GridBagConstraints gbc_btnControls = new GridBagConstraints();
+		gbc_btnControls.gridwidth = 2;
+		gbc_btnControls.fill = GridBagConstraints.BOTH;
+		gbc_btnControls.insets = new Insets(0, 0, 5, 5);
+		gbc_btnControls.gridx = 1;
+		gbc_btnControls.gridy = 5;
+		data.add(btnControls, gbc_btnControls);
 		
-		textField_1 = new JTextField();
-		textField_1.setText("50");
-		textField_1.setColumns(10);
-		textField_1.setBounds(89, 51, 61, 26);
-		panel_7.add(textField_1);
-
+		JButton btnConnection = new JButton("CONNECT");
+		btnConnection.setBackground(UIManager.getColor("CheckBoxMenuItem.selectionBackground"));
+				btnConnection.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						try {
+							Launcher.launch();
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				});
+				GridBagConstraints gbc_btnConnection = new GridBagConstraints();
+				gbc_btnConnection.gridwidth = 2;
+				gbc_btnConnection.fill = GridBagConstraints.BOTH;
+				gbc_btnConnection.insets = new Insets(0, 0, 5, 5);
+				gbc_btnConnection.gridx = 1;
+				gbc_btnConnection.gridy = 7;
+				data.add(btnConnection, gbc_btnConnection);
 		
-		textField_2 = new JTextField();
-		textField_2.setText("0");
-		textField_2.setColumns(10);
-		textField_2.setBounds(181, 51, 61, 26);
-		panel_7.add(textField_2);
+//		JPanel panel_2 = new JPanel();
+//		panel_2.
+//		panel_1.add(panel_2);
 		
-		textField_3 = new JTextField();
-		textField_3.setText("50");
-		textField_3.setColumns(10);
-		textField_3.setBounds(254, 51, 61, 26);
-		panel_7.add(textField_3);
+		JPanel panel_info = new JPanel();
+		panel_info.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		GridBagConstraints gbc_panel_info = new GridBagConstraints();
+		gbc_panel_info.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_info.fill = GridBagConstraints.BOTH;
+		gbc_panel_info.gridx = 2;
+		gbc_panel_info.gridy = 0;
+		contentPane.add(panel_info, gbc_panel_info);
+		panel_info.setBackground(SystemColor.window);
+		GridBagLayout gbl_panel_info = new GridBagLayout();
+		gbl_panel_info.columnWidths = new int[] {30, 135, 40, 40, 40, 0};
+		gbl_panel_info.rowHeights = new int[]{35, 17, 24, 24, 24, 24, 0, 18, 0, 24, 24, 24, 24, 24, 22, 25, 37, 0};
+		gbl_panel_info.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+		gbl_panel_info.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel_info.setLayout(gbl_panel_info);
 		
-		textField_4 = new JTextField();
-		textField_4.setText("0");
-		textField_4.setBounds(333, 51, 69, 26);
-		panel_7.add(textField_4);
-		textField_4.setColumns(10);
+		JLabel lblNewLabel1 = new JLabel("Vehicle Status");
+		lblNewLabel1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel1.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		GridBagConstraints gbc_lblNewLabel1 = new GridBagConstraints();
+		gbc_lblNewLabel1.anchor = GridBagConstraints.WEST;
+		gbc_lblNewLabel1.fill = GridBagConstraints.VERTICAL;
+		gbc_lblNewLabel1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel1.gridx = 1;
+		gbc_lblNewLabel1.gridy = 0;
+		panel_info.add(lblNewLabel1, gbc_lblNewLabel1);
+		JLabel lblAxisZ = new JLabel("Elevation");
+		lblAxisZ.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		lblAxisZ.setForeground(Color.BLACK);
+		GridBagConstraints gbc_lblAxisZ = new GridBagConstraints();
+		gbc_lblAxisZ.anchor = GridBagConstraints.WEST;
+		gbc_lblAxisZ.gridwidth = 2;
+		gbc_lblAxisZ.fill = GridBagConstraints.VERTICAL;
+		gbc_lblAxisZ.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAxisZ.gridx = 1;
+		gbc_lblAxisZ.gridy = 1;
+		panel_info.add(lblAxisZ, gbc_lblAxisZ);
 		
-		textField_5 = new JTextField();
-		textField_5.setText("50");
-		textField_5.setBounds(413, 51, 61, 26);
-		panel_7.add(textField_5);
-		textField_5.setColumns(10);
+		txtFieldZ = new JTextField();
+		txtFieldZ.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		txtFieldZ.setText("0.0");
+		txtFieldZ.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtFieldZ.setEditable(false);
+		txtFieldZ.setColumns(10);
+		GridBagConstraints gbc_txtFieldZ = new GridBagConstraints();
+		gbc_txtFieldZ.fill = GridBagConstraints.BOTH;
+		gbc_txtFieldZ.insets = new Insets(0, 0, 5, 5);
+		gbc_txtFieldZ.gridx = 4;
+		gbc_txtFieldZ.gridy = 1;
+		panel_info.add(txtFieldZ, gbc_txtFieldZ);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(595, 5, 330, 555);
-		contentPane.add(panel_1);
+		JLabel lblNose = new JLabel("Nose");
+		lblNose.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		lblNose.setForeground(Color.BLACK);
+		GridBagConstraints gbc_lblNose = new GridBagConstraints();
+		gbc_lblNose.anchor = GridBagConstraints.WEST;
+		gbc_lblNose.gridwidth = 2;
+		gbc_lblNose.fill = GridBagConstraints.VERTICAL;
+		gbc_lblNose.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNose.gridx = 1;
+		gbc_lblNose.gridy = 2;
+		panel_info.add(lblNose, gbc_lblNose);
+		
+		txtFieldNose = new JTextField();
+		txtFieldNose.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		txtFieldNose.setText("0.0");
+		txtFieldNose.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtFieldNose.setEditable(false);
+		txtFieldNose.setColumns(10);
+		GridBagConstraints gbc_txtFieldNose = new GridBagConstraints();
+		gbc_txtFieldNose.fill = GridBagConstraints.BOTH;
+		gbc_txtFieldNose.insets = new Insets(0, 0, 5, 5);
+		gbc_txtFieldNose.gridx = 4;
+		gbc_txtFieldNose.gridy = 2;
+		panel_info.add(txtFieldNose, gbc_txtFieldNose);
+		
+		JLabel lblRoll = new JLabel("Roll");
+		lblRoll.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		lblRoll.setForeground(Color.BLACK);
+		GridBagConstraints gbc_lblRoll = new GridBagConstraints();
+		gbc_lblRoll.anchor = GridBagConstraints.WEST;
+		gbc_lblRoll.gridwidth = 2;
+		gbc_lblRoll.fill = GridBagConstraints.VERTICAL;
+		gbc_lblRoll.insets = new Insets(0, 0, 5, 5);
+		gbc_lblRoll.gridx = 1;
+		gbc_lblRoll.gridy = 3;
+		panel_info.add(lblRoll, gbc_lblRoll);
+		
+		txtFieldRoll = new JTextField();
+		txtFieldRoll.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		txtFieldRoll.setText("0.0");
+		txtFieldRoll.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtFieldRoll.setEditable(false);
+		txtFieldRoll.setColumns(10);
+		GridBagConstraints gbc_txtFieldRoll = new GridBagConstraints();
+		gbc_txtFieldRoll.fill = GridBagConstraints.BOTH;
+		gbc_txtFieldRoll.insets = new Insets(0, 0, 5, 5);
+		gbc_txtFieldRoll.gridx = 4;
+		gbc_txtFieldRoll.gridy = 3;
+		panel_info.add(txtFieldRoll, gbc_txtFieldRoll);
+		
+		JLabel labelEuler = new JLabel("Euler Angles");
+		labelEuler.setHorizontalAlignment(SwingConstants.LEFT);
+		labelEuler.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		GridBagConstraints gbc_labelEuler = new GridBagConstraints();
+		gbc_labelEuler.anchor = GridBagConstraints.WEST;
+		gbc_labelEuler.fill = GridBagConstraints.VERTICAL;
+		gbc_labelEuler.insets = new Insets(0, 0, 5, 5);
+		gbc_labelEuler.gridx = 1;
+		gbc_labelEuler.gridy = 4;
+		panel_info.add(labelEuler, gbc_labelEuler);
+		
+		JLabel lblEulerRoll = new JLabel("Roll");
+		lblEulerRoll.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEulerRoll.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		GridBagConstraints gbc_lblEulerRoll = new GridBagConstraints();
+		gbc_lblEulerRoll.fill = GridBagConstraints.BOTH;
+		gbc_lblEulerRoll.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEulerRoll.gridx = 2;
+		gbc_lblEulerRoll.gridy = 4;
+		panel_info.add(lblEulerRoll, gbc_lblEulerRoll);
+		
+		JLabel lblEurlerPitch = new JLabel("Pitch");
+		lblEurlerPitch.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEurlerPitch.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		GridBagConstraints gbc_lblEurlerPitch = new GridBagConstraints();
+		gbc_lblEurlerPitch.fill = GridBagConstraints.BOTH;
+		gbc_lblEurlerPitch.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEurlerPitch.gridx = 3;
+		gbc_lblEurlerPitch.gridy = 4;
+		panel_info.add(lblEurlerPitch, gbc_lblEurlerPitch);
+		
+		JLabel lblEulerYaw = new JLabel("Yaw");
+		lblEulerYaw.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEulerYaw.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		GridBagConstraints gbc_lblEulerYaw = new GridBagConstraints();
+		gbc_lblEulerYaw.fill = GridBagConstraints.BOTH;
+		gbc_lblEulerYaw.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEulerYaw.gridx = 4;
+		gbc_lblEulerYaw.gridy = 4;
+		panel_info.add(lblEulerYaw, gbc_lblEulerYaw);
+		
+		// Euler's angle
+		txtEulerRoll = new JTextField();
+		txtEulerRoll.setText("0.0");
+		txtEulerRoll.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtEulerRoll.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		txtEulerRoll.setEditable(false);
+		txtEulerRoll.setColumns(10);
+		GridBagConstraints gbc_txtEulerRoll = new GridBagConstraints();
+		gbc_txtEulerRoll.fill = GridBagConstraints.BOTH;
+		gbc_txtEulerRoll.insets = new Insets(0, 0, 5, 5);
+		gbc_txtEulerRoll.gridx = 2;
+		gbc_txtEulerRoll.gridy = 5;
+		panel_info.add(txtEulerRoll, gbc_txtEulerRoll);
+		
+		txtEulerPitch = new JTextField();
+		txtEulerPitch.setText("0.0");
+		txtEulerPitch.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtEulerPitch.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		txtEulerPitch.setEditable(false);
+		txtEulerPitch.setColumns(10);
+		GridBagConstraints gbc_txtEulerPitch = new GridBagConstraints();
+		gbc_txtEulerPitch.fill = GridBagConstraints.BOTH;
+		gbc_txtEulerPitch.insets = new Insets(0, 0, 5, 5);
+		gbc_txtEulerPitch.gridx = 3;
+		gbc_txtEulerPitch.gridy = 5;
+		panel_info.add(txtEulerPitch, gbc_txtEulerPitch);
+		
+		txtEulerYaw = new JTextField();
+		txtEulerYaw.setText("0.0");
+		txtEulerYaw.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtEulerYaw.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		txtEulerYaw.setEditable(false);
+		txtEulerYaw.setColumns(10);
+		GridBagConstraints gbc_txtEulerYaw = new GridBagConstraints();
+		gbc_txtEulerYaw.fill = GridBagConstraints.BOTH;
+		gbc_txtEulerYaw.insets = new Insets(0, 0, 5, 5);
+		gbc_txtEulerYaw.gridx = 4;
+		gbc_txtEulerYaw.gridy = 5;
+		panel_info.add(txtEulerYaw, gbc_txtEulerYaw);
+		
+		JLabel lblAcceleration = new JLabel("Acceleration");
+		lblAcceleration.setHorizontalAlignment(SwingConstants.LEFT);
+		lblAcceleration.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		GridBagConstraints gbc_lblAcceleration = new GridBagConstraints();
+		gbc_lblAcceleration.anchor = GridBagConstraints.WEST;
+		gbc_lblAcceleration.fill = GridBagConstraints.VERTICAL;
+		gbc_lblAcceleration.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAcceleration.gridx = 1;
+		gbc_lblAcceleration.gridy = 6;
+		panel_info.add(lblAcceleration, gbc_lblAcceleration);
+		
+		// Acceleration from IMU
+		JLabel lblAccX = new JLabel("X");
+		lblAccX.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAccX.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		GridBagConstraints gbc_lblAccX = new GridBagConstraints();
+		gbc_lblAccX.fill = GridBagConstraints.BOTH;
+		gbc_lblAccX.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAccX.gridx = 2;
+		gbc_lblAccX.gridy = 6;
+		panel_info.add(lblAccX, gbc_lblAccX);
+		
+		JLabel lblAccY = new JLabel("Y");
+		lblAccY.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAccY.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		GridBagConstraints gbc_lblAccY = new GridBagConstraints();
+		gbc_lblAccY.fill = GridBagConstraints.BOTH;
+		gbc_lblAccY.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAccY.gridx = 3;
+		gbc_lblAccY.gridy = 6;
+		panel_info.add(lblAccY, gbc_lblAccY);
+		
+		JLabel lblAccZ = new JLabel("Z");
+		lblAccZ.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAccZ.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		GridBagConstraints gbc_lblAccZ = new GridBagConstraints();
+		gbc_lblAccZ.fill = GridBagConstraints.BOTH;
+		gbc_lblAccZ.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAccZ.gridx = 4;
+		gbc_lblAccZ.gridy = 6;
+		panel_info.add(lblAccZ, gbc_lblAccZ);
+		
+		txtAccX = new JTextField();
+		txtAccX.setText("0.0");
+		txtAccX.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtAccX.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		txtAccX.setEditable(false);
+		txtAccX.setColumns(10);
+		GridBagConstraints gbc_txtAccX = new GridBagConstraints();
+		gbc_txtAccX.fill = GridBagConstraints.BOTH;
+		gbc_txtAccX.insets = new Insets(0, 0, 5, 5);
+		gbc_txtAccX.gridx = 2;
+		gbc_txtAccX.gridy = 7;
+		panel_info.add(txtAccX, gbc_txtAccX);
+		
+		txtAccY = new JTextField();
+		txtAccY.setText("0.0");
+		txtAccY.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtAccY.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		txtAccY.setEditable(false);
+		txtAccY.setColumns(10);
+		GridBagConstraints gbc_txtAccY = new GridBagConstraints();
+		gbc_txtAccY.fill = GridBagConstraints.BOTH;
+		gbc_txtAccY.insets = new Insets(0, 0, 5, 5);
+		gbc_txtAccY.gridx = 3;
+		gbc_txtAccY.gridy = 7;
+		panel_info.add(txtAccY, gbc_txtAccY);
+		
+		txtAccZ = new JTextField();
+		txtAccZ.setText("0.0");
+		txtAccZ.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtAccZ.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		txtAccZ.setEditable(false);
+		txtAccZ.setColumns(10);
+		GridBagConstraints gbc_txtAccZ = new GridBagConstraints();
+		gbc_txtAccZ.fill = GridBagConstraints.BOTH;
+		gbc_txtAccZ.insets = new Insets(0, 0, 5, 5);
+		gbc_txtAccZ.gridx = 4;
+		gbc_txtAccZ.gridy = 7;
+		panel_info.add(txtAccZ, gbc_txtAccZ);
+		
+		JLabel lblNetworkStatus = new JLabel("Network Status");
+		lblNetworkStatus.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNetworkStatus.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		GridBagConstraints gbc_lblNetworkStatus = new GridBagConstraints();
+		gbc_lblNetworkStatus.anchor = GridBagConstraints.WEST;
+		gbc_lblNetworkStatus.fill = GridBagConstraints.VERTICAL;
+		gbc_lblNetworkStatus.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNetworkStatus.gridx = 1;
+		gbc_lblNetworkStatus.gridy = 9;
+		panel_info.add(lblNetworkStatus, gbc_lblNetworkStatus);
+		
+		JLabel lblIp = new JLabel("IP");
+		lblIp.setForeground(Color.BLACK);
+		lblIp.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		GridBagConstraints gbc_lblIp = new GridBagConstraints();
+		gbc_lblIp.anchor = GridBagConstraints.WEST;
+		gbc_lblIp.fill = GridBagConstraints.VERTICAL;
+		gbc_lblIp.insets = new Insets(0, 0, 5, 5);
+		gbc_lblIp.gridx = 1;
+		gbc_lblIp.gridy = 10;
+		panel_info.add(lblIp, gbc_lblIp);
+		
+		ImageIcon logo_icon = new ImageIcon("logo.png");
+		Image logo_resized = logo_icon.getImage().getScaledInstance(200, -1, java.awt.Image.SCALE_SMOOTH);
+		logo_icon = new ImageIcon(logo_resized);
+		
+		txtIP = new JTextField();
+		txtIP.setBackground(SystemColor.menu);
+		txtIP.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		txtIP.setText(Launcher.address);
+		GridBagConstraints gbc_txtIP = new GridBagConstraints();
+		gbc_txtIP.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtIP.gridwidth = 3;
+		gbc_txtIP.insets = new Insets(0, 0, 5, 5);
+		gbc_txtIP.gridx = 2;
+		gbc_txtIP.gridy = 10;
+		panel_info.add(txtIP, gbc_txtIP);
+		txtIP.setColumns(10);
+		
+		JLabel lblHbridgePort = new JLabel("HBridge Port");
+		lblHbridgePort.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		GridBagConstraints gbc_lblHbridgePort = new GridBagConstraints();
+		gbc_lblHbridgePort.anchor = GridBagConstraints.WEST;
+		gbc_lblHbridgePort.insets = new Insets(0, 0, 5, 5);
+		gbc_lblHbridgePort.gridx = 1;
+		gbc_lblHbridgePort.gridy = 11;
+		panel_info.add(lblHbridgePort, gbc_lblHbridgePort);
+		
+		txtHBridgePort = new JTextField();
+		txtHBridgePort.setBackground(SystemColor.menu);
+		txtHBridgePort.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		txtHBridgePort.setText(Launcher.hPort);
+		GridBagConstraints gbc_txtHBridgePort = new GridBagConstraints();
+		gbc_txtHBridgePort.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtHBridgePort.gridwidth = 2;
+		gbc_txtHBridgePort.insets = new Insets(0, 0, 5, 5);
+		gbc_txtHBridgePort.gridx = 3;
+		gbc_txtHBridgePort.gridy = 11;
+		panel_info.add(txtHBridgePort, gbc_txtHBridgePort);
+		txtHBridgePort.setColumns(10);
+		
+		JLabel lblServoPort = new JLabel("Servo Port");
+		lblServoPort.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		GridBagConstraints gbc_lblServoPort = new GridBagConstraints();
+		gbc_lblServoPort.anchor = GridBagConstraints.WEST;
+		gbc_lblServoPort.insets = new Insets(0, 0, 5, 5);
+		gbc_lblServoPort.gridx = 1;
+		gbc_lblServoPort.gridy = 12;
+		panel_info.add(lblServoPort, gbc_lblServoPort);
+		
+		txtServoPort = new JTextField();
+		txtServoPort.setBackground(SystemColor.menu);
+		txtServoPort.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		txtServoPort.setText(Launcher.sPort);
+		GridBagConstraints gbc_txtServoPort = new GridBagConstraints();
+		gbc_txtServoPort.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtServoPort.gridwidth = 2;
+		gbc_txtServoPort.insets = new Insets(0, 0, 5, 5);
+		gbc_txtServoPort.gridx = 3;
+		gbc_txtServoPort.gridy = 12;
+		panel_info.add(txtServoPort, gbc_txtServoPort);
+		txtServoPort.setColumns(10);
+		JLabel lblNewLabel = new JLabel("");
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.gridheight = 3;
+		gbc_lblNewLabel.gridwidth = 4;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.gridx = 1;
+		gbc_lblNewLabel.gridy = 13;
+		panel_info.add(lblNewLabel, gbc_lblNewLabel);
+		lblNewLabel.setIcon(logo_icon);
 		
 		JButton btnNewButton = new JButton("Quit");
-		btnNewButton.setBounds(195, 484, 109, 29);
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.gridwidth = 4;
+		gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
+		gbc_btnNewButton.gridx = 1;
+		gbc_btnNewButton.gridy = 16;
+//		panel_info.add(btnNewButton, gbc_btnNewButton);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				try{
-					Launcher.server[0].out.flush();
-					Launcher.server[2].out.flush();
-					Launcher.server[4].out.flush();
-				}catch(Exception a) {
+					Launcher.sServer.out.flush();
+				}
+				catch(Exception a) {
 					System.exit(0);
 				}
-				Launcher.server[0].sendMessage("gergergergerg");
-				Launcher.server[2].sendMessage("gregergt");
-				Launcher.server[4].sendMessage("quergregergit");
+				finally {
 				System.out.println("exited");
 				System.exit(0);
+				}
 			}
 		});
-		panel_1.setLayout(null);
-		panel_1.add(btnNewButton);
+//		pack();
 		
-		JButton btnConnection = new JButton("Connection");
-		btnConnection.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnConnection.setBounds(33, 484, 109, 29);
-		panel_1.add(btnConnection);
-		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(34, 26, 270, 185);
-		panel_1.add(panel_2);
-		
-		JLabel label_15 = new JLabel(new ImageIcon("rocket.jpg"));
-		panel_2.add(label_15);
-		
-		JButton btnSubmit = new JButton("Submit");
-		
-		btnSubmit.setBounds(113, 422, 117, 29);
-		panel_1.add(btnSubmit);
-		
-		textPane = new JTextPane();
-		textPane.setFont(new Font("Courier", Font.PLAIN, 13));
-		textPane.setBounds(33, 223, 271, 187);
-		panel_1.add(textPane);
-		
-		btnSubmit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("pressed");
-				Controller.sendCommand(textPane.getText());
-			}
-		});
-	}
+		        
 	
-	public static JSlider getSlider(int i) {
-		return sliders[i];
+	
+		        }
+		        
 	}
-}
+		        
+
+	
+
+
