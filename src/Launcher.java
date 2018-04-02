@@ -3,8 +3,8 @@ import java.awt.EventQueue;
 public class Launcher {
 	static TCPServer sServer;
 	static TCPServer hServer;
-	static HBridge thrust;
-	static Servo servo;
+	static Motor thrust;
+	static Motor servo;
 	static IMU imu;
 	static Controls control;
 	static Settings setting;
@@ -52,17 +52,18 @@ public class Launcher {
 
 		Controller controller = new Controller();
 		controller.start();
-		sServer = new TCPServer(address, sPort);
-		sServer.start();
-		hServer = new TCPServer(address, hPort);
-		hServer.start();
+		
+//		sServer = new TCPServer(address, sPort);
+//		sServer.start();
+//		hServer = new TCPServer(address, hPort);
+//		hServer.start();
 
-		System.out.println("Servers started.\n");
+//		System.out.println("Servers started.\n");
 
-		servo = new Servo();
+		servo = new Motor(address, sPort);
 		servo.start();
 
-		thrust = new HBridge();
+		thrust = new Motor(address, hPort);
 		thrust.start();
 
 		System.out.println("PWM Controls initialized.\n");

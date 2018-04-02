@@ -1,22 +1,25 @@
 import java.io.IOException;
 
-public class Servo extends Thread
+public class Motor extends Thread
 {
 	static String fromBeagleBone, toBeagleBone;
 	private static int checkFlag = 0;
+	private TCPServer server;
 
- 
-    public Servo() throws IOException
+    public Motor(String address, String socketNumber) throws IOException
     {	
-    		initialize();
+    		initialize(address, socketNumber);
     }
     
-    public void initialize() throws IOException
+    public void initialize(String address, String socketNumber) throws IOException
     {
     		System.out.println("Servo initialized.");
-//    		dutyCycleBefore = 0;
-//    		dutyCycle = 0;
-    		//Launcher.server[1].sendMessage("thruster"+" "+sliderNumber+" connected.");
+    		try {
+				server = new TCPServer(address, socketNumber);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     }
     
 	@Override
