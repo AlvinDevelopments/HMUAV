@@ -9,7 +9,7 @@ public class Camera {
 
 	public static CaptureDeviceInfo run() {
 	
-	 VFWAuto vfwObj = new VFWAuto();
+//	 VFWAuto vfwObj = new VFWAuto();
 
 	    Vector devices = CaptureDeviceManager.getDeviceList(null);
 	    Enumeration deviceEnum = devices.elements();

@@ -4,9 +4,6 @@ public class Servo extends Thread
 {
 	static String fromBeagleBone, toBeagleBone;
 	private static int checkFlag = 0;
-//	int dutyCycleBefore;
-//	int dutyCycle;
-//	int sliderNumber = 0;
 
  
     public Servo() throws IOException
