@@ -1,38 +1,42 @@
 
+/**
+ * The controller class contains various functions which 
+ * @author alvinli
+ *
+ */
 public class Controller extends Thread{
 	
 	public Controller(){
-		//TO-DO
+		// TODO Auto-generated method stub
 	}
 	
-	public static void yawLeft(int degree) {
-		
+	public void yawLeft(int degree) {
+		// TODO Auto-generated method stub
 	}
 	
-	public static void yawRight(int degree) {
-		
+	public void yawRight(int degree) {
+		// TODO Auto-generated method stub
 	}
 	
-	
-	public static void rollLeft(int degree) {
-		
+	public void rollLeft(int degree) {
+		// TODO Auto-generated method stub
 	}
 	
-	public static void rollRight(int degree) {
-		
+	public void rollRight(int degree) {
+		// TODO Auto-generated method stub
 	}
 	
-	public static void pitchLeft(int degree) {
-		
+	public void pitchLeft(int degree) {
+		// TODO Auto-generated method stub
 	}
 	
-	public static void pitchRight(int degree) {
-		
+	public void pitchRight(int degree) {
+		// TODO Auto-generated method stub
 	}
 	
-	public static void moveForward(int thrust) {
-		Launcher.sServer.sendMessage(50,50,50);
-		Launcher.hServer.sendMessage(thrust,thrust,thrust);
+	public void moveForward(int thrust) {
+		Launcher.servo.setMotorValues(500, 500, 500);
+		Launcher.thrust.setMotorValues(thrust, thrust, thrust);
 		newGUI.servo_1.setValue(50);
 		newGUI.servo_2.setValue(50);
 		newGUI.servo_3.setValue(50);
@@ -41,9 +45,9 @@ public class Controller extends Thread{
 		newGUI.thruster_3.setValue(thrust);
 	}
 	
-	public static void moveBackward(int thrust) {
-		Launcher.sServer.sendMessage(0,0,0);
-		Launcher.hServer.sendMessage(thrust,thrust,thrust);
+	public void moveBackward(int thrust) {
+		Launcher.servo.setMotorValues(0, 0, 0);
+		Launcher.thrust.setMotorValues(thrust, thrust, thrust);
 		newGUI.servo_1.setValue(0);
 		newGUI.servo_2.setValue(0);
 		newGUI.servo_3.setValue(0);
@@ -53,39 +57,37 @@ public class Controller extends Thread{
 	}
 	
 	
-	public static void leftThrust(int dutyCycle) {
-		
-		
-		
+	public void leftThrust(int dutyCycle) {
+		// TODO Auto-generated method stub
 	}
 	
-	public static void rightThrust(int dutyCycle) {
-		
+	public void rightThrust(int dutyCycle) {
+		// TODO Auto-generated method stub
 	}
 	
-	public static void rearThrust(int dutyCycle) {
-		
+	public void rearThrust(int dutyCycle) {
+		// TODO Auto-generated method stub
 	}
 	
-	public static void leftTilt(int dutyCycle) {
-		
+	public void leftTilt(int dutyCycle) {
+		// TODO Auto-generated method stub
 	}
 	
-	public static void rightTilt(int dutyCycle) {
-		
+	public void rightTilt(int dutyCycle) {
+		// TODO Auto-generated method stub
 	}
 	
-	public static void rearTilt(int dutyCycle) {
-		
+	public void rearTilt(int dutyCycle) {
+		// TODO Auto-generated method stub
 	}
 	
-	public static void stopThrusters() {
-		Launcher.hServer.sendMessage(50,50,50);
+	public void stopThrusters() {
+		Launcher.thrust.setMotorValues(50, 50, 50);
 	}
 	
 	
 	
-	public static void sendCommand(String command){
+	public void sendCommand(String command){
 		System.out.println(command);
 		String[] commandArray = command.split("\n");
 		String[][] commands = new String[commandArray.length][3];
@@ -142,11 +144,8 @@ public class Controller extends Thread{
 					e.printStackTrace();
 				}
 			}
-			
-			
-			
-			i++;
-			
+				
+			i++;			
 		}
 	}
 

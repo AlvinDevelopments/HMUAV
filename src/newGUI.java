@@ -109,6 +109,8 @@ public class newGUI extends JFrame {
 	 * @throws NoPlayerException
 	 */
 	public newGUI() throws NoPlayerException, CannotRealizeException, IOException {
+		
+		
 		setResizable(false);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -299,7 +301,7 @@ public class newGUI extends JFrame {
 		thruster_1.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				textField.setText(Integer.toString(thruster_1.getValue()));
-				HBridge.setFlagOn();
+				Launcher.thrust.setFlagOn(thruster_1.getValue(), thruster_2.getValue(), thruster_3.getValue());
 			}
 
 		});
@@ -324,7 +326,7 @@ public class newGUI extends JFrame {
 		thruster_2.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				textField_2.setText(Integer.toString(thruster_2.getValue()));
-				HBridge.setFlagOn();
+				Launcher.thrust.setFlagOn(thruster_1.getValue(), thruster_2.getValue(), thruster_3.getValue());
 			}
 		});
 		thruster_2.setOrientation(SwingConstants.VERTICAL);
@@ -346,8 +348,9 @@ public class newGUI extends JFrame {
 
 		thruster_3.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
+				System.out.println("thruster 3 changed");
 				textField_4.setText(Integer.toString(thruster_3.getValue()));
-				HBridge.setFlagOn();
+				Launcher.thrust.setFlagOn(thruster_1.getValue(), thruster_2.getValue(), thruster_3.getValue());
 			}
 		});
 		thruster_3.setOrientation(SwingConstants.VERTICAL);
@@ -417,7 +420,7 @@ public class newGUI extends JFrame {
 		servo_1.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				textField_1.setText(Integer.toString(servo_1.getValue()));
-				Motor.setFlagOn();
+				Launcher.servo.setFlagOn(servo_1.getValue(), servo_2.getValue(), servo_3.getValue());
 			}
 		});
 		servo_1.setOrientation(SwingConstants.VERTICAL);
@@ -440,7 +443,7 @@ public class newGUI extends JFrame {
 		servo_2.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				textField_3.setText(Integer.toString(servo_2.getValue()));
-				Motor.setFlagOn();
+				Launcher.servo.setFlagOn(servo_1.getValue(), servo_2.getValue(), servo_3.getValue());
 			}
 		});
 		servo_2.setOrientation(SwingConstants.VERTICAL);
@@ -462,7 +465,7 @@ public class newGUI extends JFrame {
 		servo_3.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				textField_5.setText(Integer.toString(servo_3.getValue()));
-				Motor.setFlagOn();
+				Launcher.servo.setFlagOn(servo_1.getValue(), servo_2.getValue(), servo_3.getValue());
 			}
 		});
 		servo_3.setOrientation(SwingConstants.VERTICAL);
@@ -534,7 +537,7 @@ public class newGUI extends JFrame {
 
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Controller.sendCommand(scriptPane.getText());
+				Launcher.controller.sendCommand(scriptPane.getText());
 			}
 		});
 
@@ -978,7 +981,7 @@ public class newGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				try {
-					Launcher.sServer.out.flush();
+//					Launcher.sServer.out.flush();
 				} catch (Exception a) {
 					System.exit(0);
 				} finally {

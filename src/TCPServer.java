@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -6,7 +5,7 @@ import java.util.Scanner;
 
 
 public class TCPServer extends Thread {
-	 private String input = "";
+	private String input = "";
     private Socket socket;
     Scanner scanner;
     PrintWriter out;
@@ -27,12 +26,12 @@ public class TCPServer extends Thread {
 
     public void run() {
         while (true) {
-            try {
-				out = new PrintWriter(this.socket.getOutputStream(), true);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//            try {
+//				out = new PrintWriter(this.socket.getOutputStream(), true);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
         		//System.out.print(input);
         		if(!input.matches("")) {
         			//System.out.print(input);
@@ -51,6 +50,7 @@ public class TCPServer extends Thread {
     
     public void sendMessage(int value1, int value2, int value3) {
     		input = Integer.toString(value1)+" "+Integer.toString(value2)+" "+Integer.toString(value3);
+    		System.out.println(input);
     }
     
     

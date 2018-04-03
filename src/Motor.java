@@ -2,9 +2,9 @@ import java.io.IOException;
 
 public class Motor extends Thread
 {
-	static String fromBeagleBone, toBeagleBone;
-	private static int checkFlag = 0;
+	private int checkFlag = 0;
 	private TCPServer server;
+	private int motor1, motor2, motor3;
 
     public Motor(String address, String socketNumber) throws IOException
     {	
@@ -13,9 +13,10 @@ public class Motor extends Thread
     
     public void initialize(String address, String socketNumber) throws IOException
     {
-    		System.out.println("Servo initialized.");
+    		System.out.println("Motor initialized.");
     		try {
 				server = new TCPServer(address, socketNumber);
+				server.start();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -26,8 +27,8 @@ public class Motor extends Thread
 	public void run() 
 	{
 		while(true) {
-			if(checkDutyCycle())	{
-				 Launcher.sServer.sendMessage(newGUI.servo_1.getValue(),newGUI.servo_2.getValue(),newGUI.servo_3.getValue());
+			if(checkDutyCycle())	{		
+				 server.sendMessage(motor1, motor2, motor3);
 				checkFlag=0;
 			}
 		}
@@ -48,11 +49,21 @@ public class Motor extends Thread
 	}
 	
 
-	public static void setFlagOn() {
+	public void setFlagOn(int value1, int value2, int value3) {
+		setMotorValues(value1,value2,value3);
 		checkFlag = 1;
+		
 	}
 	
-	public static void setFlagOff() {
+	public void setFlagOff() {
 		checkFlag = 0;
+	}
+	
+	public void setMotorValues(int value1, int value2, int value3) {
+		motor1 = value1;
+		motor2 = value2;
+		motor3 = value3;
+		
+		checkFlag = 1;
 	}
 }

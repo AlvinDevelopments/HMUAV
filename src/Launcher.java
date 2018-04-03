@@ -1,15 +1,15 @@
 import java.awt.EventQueue;
 
 public class Launcher {
-	static TCPServer sServer;
-	static TCPServer hServer;
+	static Controller controller;
 	static Motor thrust;
 	static Motor servo;
 	static IMU imu;
+	
 	static Controls control;
 	static Settings setting;
 
-	static String address = "192.168.7.2";
+	static String address = "localhost";
 	static String sPort = "8089";
 	static String hPort = "8090";
 
@@ -50,15 +50,8 @@ public class Launcher {
 
 	static void launch() throws Exception {
 
-		Controller controller = new Controller();
+		controller = new Controller();
 		controller.start();
-		
-//		sServer = new TCPServer(address, sPort);
-//		sServer.start();
-//		hServer = new TCPServer(address, hPort);
-//		hServer.start();
-
-//		System.out.println("Servers started.\n");
 
 		servo = new Motor(address, sPort);
 		servo.start();
@@ -66,8 +59,7 @@ public class Launcher {
 		thrust = new Motor(address, hPort);
 		thrust.start();
 
-		System.out.println("PWM Controls initialized.\n");
-		System.out.println("IMU initialized.\n");
+//		System.out.println("PWM Controls initialized.\n");
 
 	}
 
@@ -77,4 +69,6 @@ public class Launcher {
 		sPort = ssPort;
 		hPort = hhPort;
 	}
+	
+	
 }

@@ -1,31 +1,23 @@
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
 
 public class IMU extends Thread {
-
-	private String data;
-	private BufferedReader reader;
 
 	private double x;
 	private double y;
 	private double z;
 	private double w;
 	private double txtFieldZ, txtFieldSpeed, txtFieldNose, txtFieldRoll, txtFieldIP, txtEulerRoll, txtEulerPitch,
-	txtEulerYaw, txtAccX, txtAccY, txtAccZ;
+			txtEulerYaw, txtAccX, txtAccY, txtAccZ;
 
 	private ServerSocket socket;
 	InputStream in;
-	String clientSentence;
-	String capitalizedSentence;
+	String input;
 
 	public IMU() throws UnknownHostException, IOException {
 		this.socket = new ServerSocket(8097);
@@ -33,12 +25,9 @@ public class IMU extends Thread {
 	}
 
 	public void run() {
-
 		Socket connectionSocket = null;
-
 		while (true) {
 			System.out.println("waiting on connection");
-			// updateGUI();
 
 			try {
 				connectionSocket = socket.accept();
@@ -55,10 +44,9 @@ public class IMU extends Thread {
 			}
 
 			while (true) {
-
 				try {
-					clientSentence = inFromClient.readLine();
-					if (clientSentence == null) {
+					input = inFromClient.readLine();
+					if (input == null) {
 						break;
 					}
 				} catch (IOException e1) {
@@ -66,10 +54,10 @@ public class IMU extends Thread {
 					e1.printStackTrace();
 				}
 
-				updateIMU(clientSentence);
+				updateIMU(input);
 				updateGUI();
 
-				clientSentence = null;
+				input = null;
 				// connectionSocket.getInputStream().flush()
 			}
 		}
@@ -77,7 +65,7 @@ public class IMU extends Thread {
 	}
 
 	private void initialize() {
-
+		System.out.println("IMU initialized.\n");
 	}
 
 	private void updateIMU(String input) {
@@ -98,7 +86,6 @@ public class IMU extends Thread {
 	}
 
 	private void updateGUI() {
-
 		newGUI.txtFieldZ.setText(Double.toString(this.txtFieldZ));
 		// newGUI.txtFieldSpeed.setText(Double.toString(this.txtFieldSpeed));
 		newGUI.txtFieldNose.setText(Double.toString(this.txtFieldNose));
@@ -110,7 +97,6 @@ public class IMU extends Thread {
 		newGUI.txtAccX.setText(Double.toString(this.txtAccX));
 		newGUI.txtAccY.setText(Double.toString(this.txtAccY));
 		newGUI.txtAccZ.setText(Double.toString(this.txtAccZ));
-
 	}
 
 }
