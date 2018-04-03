@@ -50,11 +50,11 @@ public class Controls extends JFrame {
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Controller.moveForward(100);
+				Launcher.controller.moveForward(100);
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				Controller.stopThrusters();
+				Launcher.controller.stopThrusters();
 			}
 		});
 		btnNewButton.setBounds(164, 21, 117, 29);
