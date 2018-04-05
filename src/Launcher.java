@@ -9,7 +9,7 @@ public class Launcher {
 	static Controls control;
 	static Settings setting;
 
-	static String address = "localhost";
+	static String address = "192.168.7.2";
 	static String sPort = "8089";
 	static String hPort = "8090";
 
@@ -43,8 +43,8 @@ public class Launcher {
 			e.printStackTrace();
 		}
 
-		imu = new IMU();
-		imu.start();
+//		imu = new IMU();
+//		imu.start();
 
 	}
 

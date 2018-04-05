@@ -147,34 +147,34 @@ public class newGUI extends JFrame {
 		gbl_io.rowWeights = new double[] { 1.0, 0.0, Double.MIN_VALUE };
 		io.setLayout(gbl_io);
 
-//		CaptureDeviceInfo cam = null;
-//		cam = Camera.run();
-//
-//		MediaLocator ml = null;
-//		Player player;
-//		Component cameras = null;
-//
-//		if (cam != null) {
-//			ml = new MediaLocator(cam.getLocator().toString());
-//
-//			try {
-//
-//				player = Manager.createRealizedPlayer(ml);
-//
-//				player.start();
-//				// create video screen to display webcam preview
-//				cameras = player.getVisualComponent();
-//				cameras.setSize(io.getWidth() / 4, io.getHeight());
-//			} finally {
-//			}
+		CaptureDeviceInfo cam = null;
+		cam = Camera.run();
 
-			// cameras.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		MediaLocator ml = null;
+		Player player;
+		Component cameras = null;
+
+		if (cam != null) {
+			ml = new MediaLocator(cam.getLocator().toString());
+
+			try {
+
+				player = Manager.createRealizedPlayer(ml);
+
+				player.start();
+				// create video screen to display webcam preview
+				cameras = player.getVisualComponent();
+				cameras.setSize(io.getWidth() / 4, io.getHeight());
+			} finally {
+			}
+
+//			 cameras.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 			GridBagConstraints gbc_cameras = new GridBagConstraints();
 			gbc_cameras.fill = GridBagConstraints.BOTH;
 			gbc_cameras.insets = new Insets(0, 0, 5, 0);
 			gbc_cameras.gridx = 0;
 			gbc_cameras.gridy = 0;
-//			io.add(cameras, gbc_cameras);
+			io.add(cameras, gbc_cameras);
 			GridBagLayout gbl_cameras = new GridBagLayout();
 			gbl_cameras.columnWidths = new int[] { 413, 0 };
 			gbl_cameras.rowHeights = new int[] { 258, 0 };
@@ -190,10 +190,10 @@ public class newGUI extends JFrame {
 			gbc_cam1Panel.fill = GridBagConstraints.BOTH;
 			gbc_cam1Panel.gridx = 0;
 			gbc_cam1Panel.gridy = 0;
-//			cam1Panel.add(cameras);
+			cam1Panel.add(cameras);
 			io.add(cam1Panel, gbc_cam1Panel);
-			// cameras.setLayout(gbl_cameras);
-//		}
+//			 cameras.setLayout(gbl_cameras);
+		}
 
 		JPanel panel_7 = new JPanel();
 		panel_7.setBackground(SystemColor.window);
@@ -266,7 +266,7 @@ public class newGUI extends JFrame {
 		gbc_textField_2.gridx = 1;
 		gbc_textField_2.gridy = 0;
 		thrusters.add(textField_2, gbc_textField_2);
-		textField_2.setText("45");
+		textField_2.setText("41");
 		textField_2.setColumns(10);
 
 		textField_4 = new JTextField();
@@ -315,7 +315,7 @@ public class newGUI extends JFrame {
 		gbc_thruster_2.gridx = 1;
 		gbc_thruster_2.gridy = 1;
 		thrusters.add(thruster_2, gbc_thruster_2);
-		thruster_2.setValue(45);
+		thruster_2.setValue(41);
 		thruster_2.setMinimum(0);
 		thruster_2.setMaximum(100);
 
@@ -420,7 +420,7 @@ public class newGUI extends JFrame {
 		servo_1.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				textField_1.setText(Integer.toString(servo_1.getValue()));
-				Launcher.servo.setFlagOn(servo_1.getValue(), servo_2.getValue(), servo_3.getValue());
+				Launcher.servo.setFlagOn(servo_1.getValue(), servo_3.getValue(), servo_2.getValue());
 			}
 		});
 		servo_1.setOrientation(SwingConstants.VERTICAL);
@@ -443,7 +443,7 @@ public class newGUI extends JFrame {
 		servo_2.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				textField_3.setText(Integer.toString(servo_2.getValue()));
-				Launcher.servo.setFlagOn(servo_1.getValue(), servo_2.getValue(), servo_3.getValue());
+				Launcher.servo.setFlagOn(servo_1.getValue(), servo_3.getValue(), servo_2.getValue());
 			}
 		});
 		servo_2.setOrientation(SwingConstants.VERTICAL);
@@ -465,7 +465,7 @@ public class newGUI extends JFrame {
 		servo_3.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				textField_5.setText(Integer.toString(servo_3.getValue()));
-				Launcher.servo.setFlagOn(servo_1.getValue(), servo_2.getValue(), servo_3.getValue());
+				Launcher.servo.setFlagOn(servo_1.getValue(), servo_3.getValue(), servo_2.getValue());
 			}
 		});
 		servo_3.setOrientation(SwingConstants.VERTICAL);
@@ -554,7 +554,7 @@ public class newGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				thruster_1.setValue(50);
 				servo_1.setValue(0);
-				thruster_2.setValue(45);
+				thruster_2.setValue(41);
 				servo_2.setValue(0);
 				thruster_3.setValue(48);
 				servo_3.setValue(0);
