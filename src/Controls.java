@@ -12,9 +12,6 @@ import java.awt.event.MouseEvent;
 
 public class Controls extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3793650930257551005L;
 	private JPanel contentPane;
 
