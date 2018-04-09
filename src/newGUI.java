@@ -58,7 +58,7 @@ import javax.swing.JScrollPane;
 public class newGUI extends JFrame {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -1179297588688460469L;
 	private JPanel contentPane;
@@ -103,14 +103,14 @@ public class newGUI extends JFrame {
 
 	/**
 	 * Create the frame.
-	 * 
+	 *
 	 * @throws IOException
 	 * @throws CannotRealizeException
 	 * @throws NoPlayerException
 	 */
 	public newGUI() throws NoPlayerException, CannotRealizeException, IOException {
-		
-		
+
+
 		setResizable(false);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -147,53 +147,53 @@ public class newGUI extends JFrame {
 		gbl_io.rowWeights = new double[] { 1.0, 0.0, Double.MIN_VALUE };
 		io.setLayout(gbl_io);
 
-		CaptureDeviceInfo cam = null;
-		cam = Camera.run();
+// 		CaptureDeviceInfo cam = null;
+// 		cam = Camera.run();
 
-		MediaLocator ml = null;
-		Player player;
-		Component cameras = null;
+// 		MediaLocator ml = null;
+// 		Player player;
+// 		Component cameras = null;
 
-		if (cam != null) {
-			ml = new MediaLocator(cam.getLocator().toString());
-
-			try {
-
-				player = Manager.createRealizedPlayer(ml);
-
-				player.start();
-				// create video screen to display webcam preview
-				cameras = player.getVisualComponent();
-				cameras.setSize(io.getWidth() / 4, io.getHeight());
-			} finally {
-			}
-
-//			 cameras.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-			GridBagConstraints gbc_cameras = new GridBagConstraints();
-			gbc_cameras.fill = GridBagConstraints.BOTH;
-			gbc_cameras.insets = new Insets(0, 0, 5, 0);
-			gbc_cameras.gridx = 0;
-			gbc_cameras.gridy = 0;
-			io.add(cameras, gbc_cameras);
-			GridBagLayout gbl_cameras = new GridBagLayout();
-			gbl_cameras.columnWidths = new int[] { 413, 0 };
-			gbl_cameras.rowHeights = new int[] { 258, 0 };
-			gbl_cameras.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-			gbl_cameras.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
-
-			JPanel cam1Panel = new JPanel();
-			GridBagConstraints gbc_cam1Panel = new GridBagConstraints();
-			gbc_cam1Panel.gridwidth = 2;
-			gbc_cam1Panel.ipady = 10;
-			gbc_cam1Panel.ipadx = 10;
-			gbc_cam1Panel.insets = new Insets(0, 0, 5, 5);
-			gbc_cam1Panel.fill = GridBagConstraints.BOTH;
-			gbc_cam1Panel.gridx = 0;
-			gbc_cam1Panel.gridy = 0;
-			cam1Panel.add(cameras);
-			io.add(cam1Panel, gbc_cam1Panel);
-//			 cameras.setLayout(gbl_cameras);
-		}
+// 		if (cam != null) {
+// 			ml = new MediaLocator(cam.getLocator().toString());
+//
+// 			try {
+//
+// // 				player = Manager.createRealizedPlayer(ml);
+//
+// // 				player.start();
+// 				// create video screen to display webcam preview
+// 				// cameras = player.getVisualComponent();
+// 				// cameras.setSize(io.getWidth() / 4, io.getHeight());
+// 			} finally {
+// 			}
+//
+// //			 cameras.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+// 			GridBagConstraints gbc_cameras = new GridBagConstraints();
+// 			gbc_cameras.fill = GridBagConstraints.BOTH;
+// 			gbc_cameras.insets = new Insets(0, 0, 5, 0);
+// 			gbc_cameras.gridx = 0;
+// 			gbc_cameras.gridy = 0;
+// 			// io.add(cameras, gbc_cameras);
+// 			GridBagLayout gbl_cameras = new GridBagLayout();
+// 			gbl_cameras.columnWidths = new int[] { 413, 0 };
+// 			gbl_cameras.rowHeights = new int[] { 258, 0 };
+// 			gbl_cameras.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
+// 			gbl_cameras.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
+//
+// 			JPanel cam1Panel = new JPanel();
+// 			GridBagConstraints gbc_cam1Panel = new GridBagConstraints();
+// 			gbc_cam1Panel.gridwidth = 2;
+// 			gbc_cam1Panel.ipady = 10;
+// 			gbc_cam1Panel.ipadx = 10;
+// 			gbc_cam1Panel.insets = new Insets(0, 0, 5, 5);
+// 			gbc_cam1Panel.fill = GridBagConstraints.BOTH;
+// 			gbc_cam1Panel.gridx = 0;
+// 			gbc_cam1Panel.gridy = 0;
+// 			cam1Panel.add(cameras);
+// 			io.add(cam1Panel, gbc_cam1Panel);
+// //			 cameras.setLayout(gbl_cameras);
+// 		}
 
 		JPanel panel_7 = new JPanel();
 		panel_7.setBackground(SystemColor.window);
